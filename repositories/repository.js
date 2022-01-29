@@ -39,6 +39,7 @@ module.exports = class Repository {
 			JSON.stringify(records, null, 2)
 		);
 	}
+
 	randomId() {
 		return crypto.randomBytes(4).toString("hex");
 	}
@@ -59,7 +60,7 @@ module.exports = class Repository {
 		const record = records.find((record) => record.id === id);
 
 		if (!record) {
-			throw Error(`Record with id ${id} not found`);
+			throw new Error(`Record with id ${id} not found`);
 		}
 
 		Object.assign(record, attrs);
@@ -68,13 +69,19 @@ module.exports = class Repository {
 
 	async getOneBy(filters) {
 		const records = await this.getAll();
+
 		for (let record of records) {
 			let found = true;
 
 			for (let key in filters) {
-				if (record[key] !== filters[key]) found = false;
+				if (record[key] !== filters[key]) {
+					found = false;
+				}
 			}
-			if (found) return record;
+
+			if (found) {
+				return record;
+			}
 		}
 	}
 };
