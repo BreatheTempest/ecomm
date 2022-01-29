@@ -37,9 +37,11 @@ router.post(
 
 router.get("/admin/products/:id/edit", requireAuth, async (req, res) => {
 	const product = await productsRepo.getOne(req.params.id);
+
 	if (!product) {
 		return res.send("Product not found");
 	}
+
 	res.send(productsEditTemplate({ product }));
 });
 
@@ -48,11 +50,10 @@ router.post(
 	requireAuth,
 	upload.single("image"),
 	[requireTitle, requirePrice],
-	handleErrors(productsEditTemplate),
-	async (req) => {
+	handleErrors(productsEditTemplate, async (req) => {
 		const product = await productsRepo.getOne(req.params.id);
 		return { product };
-	},
+	}),
 	async (req, res) => {
 		const changes = req.body;
 
@@ -65,6 +66,7 @@ router.post(
 		} catch (err) {
 			return res.send("Could not find item");
 		}
+
 		res.redirect("/admin/products");
 	}
 );
