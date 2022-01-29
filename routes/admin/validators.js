@@ -20,6 +20,8 @@ module.exports = {
 			const existingUser = await usersRepo.getOneBy({ email });
 			if (existingUser) {
 				throw new Error("Email in use");
+			} else {
+				return true;
 			}
 		}),
 	requirePassword: check("password")
@@ -33,6 +35,8 @@ module.exports = {
 		.custom(async (passwordConfirmation, { req }) => {
 			if (passwordConfirmation !== req.body.password) {
 				throw new Error("Passwords must match");
+			} else {
+				return true;
 			}
 		}),
 	requireEmailExists: check("email")
@@ -44,6 +48,8 @@ module.exports = {
 			const user = await usersRepo.getOneBy({ email });
 			if (!user) {
 				throw new Error("Email not found!");
+			} else {
+				return true;
 			}
 		}),
 	requireValidPasswordForUser: check("password")
@@ -60,6 +66,8 @@ module.exports = {
 			);
 			if (!validPassword) {
 				throw new Error("Invalid password");
+			} else {
+				return true;
 			}
 		}),
 };
