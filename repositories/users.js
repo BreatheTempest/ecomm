@@ -35,5 +35,3 @@ class UsersRepository extends Repository {
 }
 
 module.exports = new UsersRepository("users.json");
-
-const test = "test";
